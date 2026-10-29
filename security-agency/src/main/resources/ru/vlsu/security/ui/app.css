@@ -1,0 +1,94 @@
+/* Цвета MaterialSkin из WinForms-версии: BlueGrey800/900/500, акцент LightBlue200 */
+.root {
+    -color-accent-emphasis: #37474F;
+    -color-accent-fg: #37474F;
+    -app-sidebar: #263238;
+    -app-header: #37474F;
+}
+
+.login-root {
+    -fx-background-color: #ECEFF1;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 12, 0, 0, 2);
+}
+
+.card-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #263238;
+}
+
+.header {
+    -fx-background-color: -app-header;
+    -fx-padding: 10 16 10 16;
+}
+
+.header .label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+.header-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.sidebar {
+    -fx-background-color: -app-sidebar;
+    -fx-padding: 8 0 8 0;
+    -fx-spacing: 2;
+    -fx-pref-width: 180;
+}
+
+.sidebar .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #CFD8DC;
+    -fx-font-size: 13px;
+    -fx-alignment: center-left;
+    -fx-padding: 12 16 12 16;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+}
+
+.sidebar .button:hover {
+    -fx-background-color: #37474F;
+}
+
+.sidebar .button.selected {
+    -fx-background-color: #546E7A;
+    -fx-text-fill: white;
+}
+
+.screen-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #263238;
+}
+
+.sensor {
+    -fx-font-size: 11px;
+    -fx-padding: 2 6 2 6;
+    -fx-background-color: #ECEFF1;
+    -fx-border-color: #546E7A;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.sensor.fired {
+    -fx-background-color: #E53935;
+    -fx-text-fill: white;
+}
+
+.status-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.journal {
+    -fx-font-family: "Consolas", monospace;
+    -fx-font-size: 12px;
+}

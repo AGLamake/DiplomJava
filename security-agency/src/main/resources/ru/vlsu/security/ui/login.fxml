@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="ru.vlsu.security.ui.LoginController"
+           styleClass="login-root">
+    <VBox fx:id="loginPane" styleClass="card" maxWidth="360" maxHeight="-Infinity" spacing="12">
+        <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+        <Label text="Авторизация" styleClass="card-title"/>
+        <TextField fx:id="loginField" promptText="Логин"/>
+        <PasswordField fx:id="passwordField" promptText="Пароль" onAction="#onLogin"/>
+        <HBox spacing="8">
+            <Button text="Войти" defaultButton="true" styleClass="accent" onAction="#onLogin"/>
+            <Button text="Регистрация" onAction="#onShowRegistration"/>
+        </HBox>
+    </VBox>
+    <VBox fx:id="registrationPane" styleClass="card" maxWidth="360" maxHeight="-Infinity" spacing="12"
+          visible="false" managed="false">
+        <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+        <Label text="Регистрация" styleClass="card-title"/>
+        <TextField fx:id="regLoginField" promptText="Логин"/>
+        <TextField fx:id="regFullNameField" promptText="ФИО"/>
+        <PasswordField fx:id="regPasswordField" promptText="Пароль"/>
+        <PasswordField fx:id="regRepeatField" promptText="Повторите пароль"/>
+        <HBox spacing="8">
+            <Button text="Создать аккаунт" styleClass="accent" onAction="#onRegister"/>
+            <Button text="Назад" onAction="#onShowLogin"/>
+        </HBox>
+    </VBox>
+</StackPane>
