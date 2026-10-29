@@ -37,6 +37,16 @@ public final class TestDb {
         }
     }
 
+    /** Первое значение первой строки запроса (или null). */
+    public static String scalar(String sql) {
+        try (Connection c = dataSource().getConnection(); Statement st = c.createStatement();
+             java.sql.ResultSet rs = st.executeQuery(sql)) {
+            return rs.next() ? rs.getString(1) : null;
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     private static String read(String path) throws IOException {
         return Files.readString(Path.of(path), StandardCharsets.UTF_8);
     }

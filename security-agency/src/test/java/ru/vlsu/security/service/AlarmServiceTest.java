@@ -16,6 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static ru.vlsu.security.TestDb.scalar;
 
 class AlarmServiceTest {
 
@@ -30,12 +31,6 @@ class AlarmServiceTest {
         alarms = new AlarmService(TestDb.dataSource(), audit);
         operator = new UserDao(TestDb.dataSource()).insert("op", PasswordHasher.hash("123456".toCharArray()),
                 "Операторов О.О.", Role.OPERATOR, true);
-    }
-
-    static String scalar(String sql) throws Exception {
-        try (var c = TestDb.dataSource().getConnection(); var st = c.createStatement(); var rs = st.executeQuery(sql)) {
-            return rs.next() ? rs.getString(1) : null;
-        }
     }
 
     @Test

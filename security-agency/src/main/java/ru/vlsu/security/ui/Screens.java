@@ -13,7 +13,9 @@ import ru.vlsu.security.model.RealEstate;
 import ru.vlsu.security.model.ResponseTeam;
 import ru.vlsu.security.model.User;
 import ru.vlsu.security.model.VehicleObject;
+import ru.vlsu.security.monitoring.ObjectKind;
 import ru.vlsu.security.security.Access;
+import ru.vlsu.security.ui.monitor.MonitorController;
 import ru.vlsu.security.security.Permissions;
 import ru.vlsu.security.security.Section;
 import ru.vlsu.security.ui.forms.ClientForm;
@@ -113,6 +115,8 @@ public final class Screens {
                     new ColumnSpec<>("Описание", InstallationRequest::description, 260)),
                     ctx.installRequests(), new InstallationRequestForm(ctx.objectRefs(), ctx.users(), user),
                     InstallationRequest::id), access);
+            case CAR_MONITOR -> MonitorController.create(ObjectKind.CAR, ctx, user, access);
+            case NDV_MONITOR -> MonitorController.create(ObjectKind.NDV, ctx, user, access);
             case USERS -> AdminScreens.users(ctx, user, access);
             case AUDIT -> AdminScreens.audit(ctx, access);
             default -> placeholder(section);
