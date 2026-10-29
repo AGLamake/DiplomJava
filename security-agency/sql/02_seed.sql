@@ -1,3 +1,5 @@
+SET client_encoding = 'UTF8';  -- файл в UTF-8; без этой строки psql в консоли Windows исказит кириллицу
+
 -- Демонстрационные данные. Пользователей нет: первый зарегистрированный становится администратором.
 
 INSERT INTO clients (client_id, client_type, name, contact_person, phone, email) OVERRIDING SYSTEM VALUE VALUES
