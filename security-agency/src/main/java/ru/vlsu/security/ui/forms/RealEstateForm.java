@@ -13,8 +13,8 @@ import ru.vlsu.security.ui.table.FormDialog;
 
 import java.util.Optional;
 
-import static ru.vlsu.security.ui.table.FormParsers.requireChoice;
-import static ru.vlsu.security.ui.table.FormParsers.requireText;
+import static ru.vlsu.security.validation.FormParsers.requireChoice;
+import static ru.vlsu.security.validation.FormParsers.requireText;
 
 public class RealEstateForm implements EntityForm<RealEstate> {
 

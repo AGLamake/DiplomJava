@@ -1,4 +1,4 @@
-package ru.vlsu.security.ui.table;
+package ru.vlsu.security.validation;
 
 import java.math.BigDecimal;
 

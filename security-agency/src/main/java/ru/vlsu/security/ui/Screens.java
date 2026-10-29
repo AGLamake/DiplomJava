@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import ru.vlsu.security.AppContext;
 import ru.vlsu.security.model.Client;
+import ru.vlsu.security.model.Contract;
 import ru.vlsu.security.model.RealEstate;
 import ru.vlsu.security.model.User;
 import ru.vlsu.security.model.VehicleObject;
@@ -13,12 +14,15 @@ import ru.vlsu.security.security.Access;
 import ru.vlsu.security.security.Permissions;
 import ru.vlsu.security.security.Section;
 import ru.vlsu.security.ui.forms.ClientForm;
+import ru.vlsu.security.ui.forms.ContractForm;
 import ru.vlsu.security.ui.forms.RealEstateForm;
 import ru.vlsu.security.ui.forms.VehicleForm;
 import ru.vlsu.security.ui.table.ColumnSpec;
 import ru.vlsu.security.ui.table.TableSpec;
 import ru.vlsu.security.ui.table.TableViewController;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /** Фабрика экранов разделов главного меню. */
@@ -67,6 +71,16 @@ public final class Screens {
                     new ColumnSpec<>("Статус", VehicleObject::objectStatus, 110),
                     new ColumnSpec<>("Охрана", VehicleObject::securityStatus, 110)),
                     ctx.vehicles(), new VehicleForm(ctx.clients()), VehicleObject::objectId), access);
+            case CONTRACTS -> TableViewController.create(TableSpec.of("Договоры", List.of(
+                    new ColumnSpec<Contract>("Номер", Contract::number, 120),
+                    new ColumnSpec<>("Клиент", Contract::clientName, 240),
+                    new ColumnSpec<>("Подписан", c -> date(c.signedOn()), 100),
+                    new ColumnSpec<>("С", c -> date(c.validFrom()), 100),
+                    new ColumnSpec<>("По", c -> date(c.validTo()), 100),
+                    new ColumnSpec<>("Статус", Contract::status, 110),
+                    new ColumnSpec<>("Цена", Contract::price, 100),
+                    new ColumnSpec<>("Объектов", c -> c.objectIds().size(), 90)),
+                    ctx.contracts(), new ContractForm(ctx.clients(), ctx.objectRefs()), Contract::id), access);
             case USERS -> AdminScreens.users(ctx, user, access);
             case AUDIT -> AdminScreens.audit(ctx, access);
             default -> placeholder(section);
@@ -88,6 +102,12 @@ public final class Screens {
         if (node.getProperties().get(KEY) instanceof Lifecycle l) {
             l.dispose();
         }
+    }
+
+    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    static String date(LocalDate d) {
+        return d == null ? null : d.format(DATE);
     }
 
     private static Parent placeholder(Section section) {

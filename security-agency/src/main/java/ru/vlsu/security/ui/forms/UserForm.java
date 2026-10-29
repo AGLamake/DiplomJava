@@ -14,9 +14,9 @@ import ru.vlsu.security.ui.table.FormDialog;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static ru.vlsu.security.ui.table.FormParsers.optionalText;
-import static ru.vlsu.security.ui.table.FormParsers.requireChoice;
-import static ru.vlsu.security.ui.table.FormParsers.requireText;
+import static ru.vlsu.security.validation.FormParsers.optionalText;
+import static ru.vlsu.security.validation.FormParsers.requireChoice;
+import static ru.vlsu.security.validation.FormParsers.requireText;
 
 /** Редактирование учётной записи администратором (создаются они только регистрацией). */
 public class UserForm implements EntityForm<User> {
