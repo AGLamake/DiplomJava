@@ -1,5 +1,7 @@
 package ru.vlsu.security.ui.table;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.util.Duration;
 import ru.vlsu.security.dao.DataAccessException;
 import ru.vlsu.security.dao.DbErrors;
 import ru.vlsu.security.security.Access;
@@ -45,10 +48,15 @@ public final class TableViewController<T> {
     }
 
     public static <T> Parent create(TableSpec<T> spec, Access access) {
-        return new TableViewController<>(spec, access).build();
+        return new TableViewController<>(spec, access).build(0);
     }
 
-    private Parent build() {
+    /** Экран с автообновлением раз в refreshSeconds секунд (пока экран не закрыт). */
+    public static <T> Parent create(TableSpec<T> spec, Access access, int refreshSeconds) {
+        return new TableViewController<>(spec, access).build(refreshSeconds);
+    }
+
+    private Parent build(int refreshSeconds) {
         Label title = new Label(spec.title());
         title.getStyleClass().add("screen-title");
         search.setPromptText("Поиск…");
@@ -103,10 +111,21 @@ public final class TableViewController<T> {
         BorderPane.setMargin(buttons, new Insets(10, 0, 0, 0));
         root.setPadding(new Insets(16));
         refresh();
+        Timeline timer = new Timeline();
+        if (refreshSeconds > 0) {
+            timer.getKeyFrames().add(new KeyFrame(Duration.seconds(refreshSeconds), e -> refresh()));
+            timer.setCycleCount(Timeline.INDEFINITE);
+            timer.play();
+        }
         return Screens.withLifecycle(root, new Screens.Lifecycle() {
             @Override
             public void onShown() {
                 refresh();
+            }
+
+            @Override
+            public void dispose() {
+                timer.stop();
             }
         });
     }

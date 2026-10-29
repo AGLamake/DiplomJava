@@ -117,6 +117,8 @@ public final class Screens {
                     InstallationRequest::id), access);
             case CAR_MONITOR -> MonitorController.create(ObjectKind.CAR, ctx, user, access);
             case NDV_MONITOR -> MonitorController.create(ObjectKind.NDV, ctx, user, access);
+            case ALARMS -> AlarmScreens.alarms(ctx, user, access);
+            case MY_DISPATCHES -> AlarmScreens.myDispatches(ctx, user, access);
             case USERS -> AdminScreens.users(ctx, user, access);
             case AUDIT -> AdminScreens.audit(ctx, access);
             default -> placeholder(section);

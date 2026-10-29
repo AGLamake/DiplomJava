@@ -70,7 +70,9 @@ class UiSmokeTest {
     }
 
     static List<String> buttonTexts(Parent root) {
-        new javafx.scene.Scene(root);
+        if (root.getScene() == null) {
+            new javafx.scene.Scene(root);
+        }
         root.applyCss();
         return root.lookupAll(".button").stream()
                 .filter(n -> n instanceof Button && !(n.getParent() instanceof javafx.scene.control.ComboBox))
