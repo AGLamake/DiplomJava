@@ -7,7 +7,10 @@ import javafx.scene.layout.StackPane;
 import ru.vlsu.security.AppContext;
 import ru.vlsu.security.model.Client;
 import ru.vlsu.security.model.Contract;
+import ru.vlsu.security.model.Equipment;
+import ru.vlsu.security.model.InstallationRequest;
 import ru.vlsu.security.model.RealEstate;
+import ru.vlsu.security.model.ResponseTeam;
 import ru.vlsu.security.model.User;
 import ru.vlsu.security.model.VehicleObject;
 import ru.vlsu.security.security.Access;
@@ -15,7 +18,10 @@ import ru.vlsu.security.security.Permissions;
 import ru.vlsu.security.security.Section;
 import ru.vlsu.security.ui.forms.ClientForm;
 import ru.vlsu.security.ui.forms.ContractForm;
+import ru.vlsu.security.ui.forms.EquipmentForm;
+import ru.vlsu.security.ui.forms.InstallationRequestForm;
 import ru.vlsu.security.ui.forms.RealEstateForm;
+import ru.vlsu.security.ui.forms.ResponseTeamForm;
 import ru.vlsu.security.ui.forms.VehicleForm;
 import ru.vlsu.security.ui.table.ColumnSpec;
 import ru.vlsu.security.ui.table.TableSpec;
@@ -81,6 +87,32 @@ public final class Screens {
                     new ColumnSpec<>("Цена", Contract::price, 100),
                     new ColumnSpec<>("Объектов", c -> c.objectIds().size(), 90)),
                     ctx.contracts(), new ContractForm(ctx.clients(), ctx.objectRefs()), Contract::id), access);
+            case TEAMS -> TableViewController.create(TableSpec.of("Группы быстрого реагирования", List.of(
+                    new ColumnSpec<ResponseTeam>("ID", ResponseTeam::id, 60),
+                    new ColumnSpec<>("Название", ResponseTeam::name, 140),
+                    new ColumnSpec<>("Телефон", ResponseTeam::phone, 150),
+                    new ColumnSpec<>("Статус", ResponseTeam::status, 120),
+                    new ColumnSpec<>("Состав", ResponseTeam::membersText, 500)),
+                    ctx.teams(), new ResponseTeamForm(ctx.users()), ResponseTeam::id), access);
+            case EQUIPMENT -> TableViewController.create(TableSpec.of("Оборудование", List.of(
+                    new ColumnSpec<Equipment>("ID", Equipment::id, 60),
+                    new ColumnSpec<>("Объект", Equipment::objectName, 220),
+                    new ColumnSpec<>("Тип", Equipment::typeName, 240),
+                    new ColumnSpec<>("Серийный номер", Equipment::serialNumber, 160),
+                    new ColumnSpec<>("Установлено", e -> date(e.installationDate()), 110),
+                    new ColumnSpec<>("Статус", Equipment::status, 130)),
+                    ctx.equipment(), new EquipmentForm(ctx.objectRefs(), ctx.equipmentTypes()), Equipment::id), access);
+            case INSTALL_REQUESTS -> TableViewController.create(TableSpec.of("Заявки на монтаж", List.of(
+                    new ColumnSpec<InstallationRequest>("ID", InstallationRequest::id, 60),
+                    new ColumnSpec<>("Объект", InstallationRequest::objectName, 200),
+                    new ColumnSpec<>("Создал", InstallationRequest::createdByName, 160),
+                    new ColumnSpec<>("Исполнитель", InstallationRequest::assignedToName, 160),
+                    new ColumnSpec<>("Создана", r -> AdminScreens.format(r.createdAt()), 140),
+                    new ColumnSpec<>("Выезд", r -> AdminScreens.format(r.scheduledAt()), 140),
+                    new ColumnSpec<>("Статус", InstallationRequest::status, 110),
+                    new ColumnSpec<>("Описание", InstallationRequest::description, 260)),
+                    ctx.installRequests(), new InstallationRequestForm(ctx.objectRefs(), ctx.users(), user),
+                    InstallationRequest::id), access);
             case USERS -> AdminScreens.users(ctx, user, access);
             case AUDIT -> AdminScreens.audit(ctx, access);
             default -> placeholder(section);
