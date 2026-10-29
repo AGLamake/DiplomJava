@@ -1,0 +1,4 @@
+# Copy to db.properties and set the password
+db.url=jdbc:postgresql://localhost:5432/security
+db.user=postgres
+db.password=postgres
