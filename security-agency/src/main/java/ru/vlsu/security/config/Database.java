@@ -7,6 +7,9 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -31,6 +34,20 @@ public final class Database {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    /** Внешний файл (рядом с программой) имеет приоритет над файлом внутри jar. */
+    public static Properties loadSettings(Path externalFile, String classpathResource) {
+        if (Files.isRegularFile(externalFile)) {
+            try (Reader r = Files.newBufferedReader(externalFile, StandardCharsets.UTF_8)) {
+                Properties p = new Properties();
+                p.load(r);
+                return p;
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+        return loadProperties(classpathResource);
     }
 
     public static HikariDataSource create(Properties p) {

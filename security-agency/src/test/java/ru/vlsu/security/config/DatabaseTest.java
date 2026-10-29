@@ -36,6 +36,20 @@ class DatabaseTest {
     }
 
     @Test
+    void loadSettings_externalFileWins(@org.junit.jupiter.api.io.TempDir java.nio.file.Path dir) throws Exception {
+        java.nio.file.Path file = dir.resolve("db.properties");
+        java.nio.file.Files.writeString(file, "db.url=jdbc:postgresql://example:5432/x\n");
+        assertEquals("jdbc:postgresql://example:5432/x",
+                Database.loadSettings(file, "db-test.properties").getProperty("db.url"));
+    }
+
+    @Test
+    void loadSettings_noExternalFile_usesClasspath(@org.junit.jupiter.api.io.TempDir java.nio.file.Path dir) {
+        assertEquals("jdbc:postgresql://localhost:5432/security_test",
+                Database.loadSettings(dir.resolve("missing.properties"), "db-test.properties").getProperty("db.url"));
+    }
+
+    @Test
     void appConfig_defaults() {
         AppConfig config = AppConfig.load();
         assertEquals(900, config.dispatchEtaSeconds());

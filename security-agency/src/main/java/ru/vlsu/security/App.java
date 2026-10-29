@@ -17,6 +17,7 @@ import ru.vlsu.security.ui.MainController;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Path;
 import java.util.Properties;
 
 public class App extends Application {
@@ -35,7 +36,7 @@ public class App extends Application {
 
         Properties dbProps;
         try {
-            dbProps = Database.loadProperties("db.properties");
+            dbProps = Database.loadSettings(Path.of("db.properties"), "db.properties");
         } catch (IllegalStateException e) {
             fatal(e.getMessage());
             return;
