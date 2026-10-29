@@ -67,6 +67,8 @@ public final class Screens {
                     new ColumnSpec<>("Статус", VehicleObject::objectStatus, 110),
                     new ColumnSpec<>("Охрана", VehicleObject::securityStatus, 110)),
                     ctx.vehicles(), new VehicleForm(ctx.clients()), VehicleObject::objectId), access);
+            case USERS -> AdminScreens.users(ctx, user, access);
+            case AUDIT -> AdminScreens.audit(ctx, access);
             default -> placeholder(section);
         };
     }

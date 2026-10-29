@@ -182,7 +182,7 @@ public final class TableViewController<T> {
 
     private void runAction(TableSpec.RowAction<T> action) {
         T selected = table.getSelectionModel().getSelectedItem();
-        if (selected != null && save(() -> action.run().accept(selected))) {
+        if (selected != null && save(() -> action.run().accept(table.getScene().getWindow(), selected))) {
             refresh();
         }
     }

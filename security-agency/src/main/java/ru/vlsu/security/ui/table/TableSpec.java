@@ -3,7 +3,7 @@ package ru.vlsu.security.ui.table;
 import ru.vlsu.security.dao.CrudDao;
 
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.function.ToLongFunction;
 
@@ -13,7 +13,7 @@ public record TableSpec<T>(String title, List<ColumnSpec<T>> columns, CrudDao<T>
                            List<RowAction<T>> actions) {
 
     /** Дополнительная кнопка над выбранной строкой (доступна только при праве на изменение). */
-    public record RowAction<T>(String title, Predicate<T> enabledFor, Consumer<T> run) {
+    public record RowAction<T>(String title, Predicate<T> enabledFor, BiConsumer<javafx.stage.Window, T> run) {
     }
 
     public static <T> TableSpec<T> of(String title, List<ColumnSpec<T>> columns, CrudDao<T> dao,
