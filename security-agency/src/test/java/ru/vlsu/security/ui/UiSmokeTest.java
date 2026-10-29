@@ -48,6 +48,36 @@ class UiSmokeTest {
     }
 
     @Test
+    void everySection_opensForAdministrator() throws Exception {
+        User admin = new User(1, "admin", "Админов А.А.", Role.ADMINISTRATOR, true, null, null);
+        for (Section s : Permissions.visibleSections(Role.ADMINISTRATOR)) {
+            FxTestSupport.onFx(() -> {
+                Parent screen = Screens.open(s, ctx, admin);
+                FxTestSupport.snapshot(screen, "section-" + s.name().toLowerCase());
+                return null;
+            });
+        }
+    }
+
+    @Test
+    void readOnlyAccess_hidesEditButtons() throws Exception {
+        User operator = new User(1, "op", "Операторов О.О.", Role.OPERATOR, true, null, null);
+        User manager = new User(2, "man", "Менеджеров М.М.", Role.MANAGER, true, null, null);
+        List<String> operatorButtons = FxTestSupport.onFx(() -> buttonTexts(Screens.open(Section.CLIENTS, ctx, operator)));
+        List<String> managerButtons = FxTestSupport.onFx(() -> buttonTexts(Screens.open(Section.CLIENTS, ctx, manager)));
+        assertEquals(List.of("Обновить"), operatorButtons);
+        assertEquals(List.of("Добавить", "Изменить", "Удалить", "Обновить"), managerButtons);
+    }
+
+    static List<String> buttonTexts(Parent root) {
+        new javafx.scene.Scene(root);
+        root.applyCss();
+        return root.lookupAll(".button").stream()
+                .filter(n -> n instanceof Button && !(n.getParent() instanceof javafx.scene.control.ComboBox))
+                .map(n -> ((Button) n).getText()).toList();
+    }
+
+    @Test
     void mainMenu_showsOnlyPermittedSections() throws Exception {
         for (Role role : List.of(Role.ADMINISTRATOR, Role.OPERATOR, Role.ENGINEER, Role.RESPONSE_TEAM)) {
             User user = new User(1, "u", "Тестов Т.Т.", role, true, null, null);
