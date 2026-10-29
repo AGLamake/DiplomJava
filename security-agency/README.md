@@ -12,10 +12,15 @@
 ## Подготовка базы данных
 
 ```powershell
+chcp 65001                                              # чтобы сообщения psql читались в консоли
 psql -U postgres -c "CREATE DATABASE security"
-psql -U postgres -d security -1 -f sql/01_schema.sql
-psql -U postgres -d security -1 -f sql/02_seed.sql      # демонстрационные данные (по желанию)
+psql -U postgres -d security -1 -f sql/01_schema.sql    # сначала схема
+psql -U postgres -d security -1 -f sql/02_seed.sql      # потом демонстрационные данные (по желанию)
 ```
+
+Ошибка `отношение "clients" не существует` означает, что `02_seed.sql` запущен до `01_schema.sql`.
+Нечитаемые сообщения psql (`Р?РЁР?Р'Р?Р?`) — признак того, что консоль не переключена на UTF-8 (`chcp 65001`);
+на данные в базе это не влияет.
 
 Для автотестов нужна отдельная база `security_test`. Тесты сами пересоздают в ней схему,
 настройки лежат в `src/test/resources/db-test.properties`:
