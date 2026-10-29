@@ -34,6 +34,11 @@ public final class Dialogs {
         Alert alert = new Alert(type, message);
         alert.setTitle(TITLE);
         alert.setHeaderText(null);
-        alert.showAndWait();
+        try {
+            alert.showAndWait();
+        } catch (IllegalStateException e) {
+            // Вызов из таймера (Timeline): модальное ожидание запрещено, показываем без ожидания.
+            alert.show();
+        }
     }
 }
