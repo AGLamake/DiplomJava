@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="ru">
+<f:view locale="ru">
+    <ui:insert name="metadata"/>
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Охранное агентство</title>
+        <h:outputStylesheet name="css/app.css"/>
+        <h:outputScript name="js/app.js"/>
+    </h:head>
+    <h:body>
+        <div class="app">
+            <header class="header">
+                <span class="header-title">Главное меню</span>
+                <span class="header-spacer"></span>
+                <span>#{userSession.userLabel}</span>
+                <h:form id="headerForm">
+                    <p:commandButton value="О программе" type="button" styleClass="ui-button-flat"
+                                     onclick="PF('aboutDlg').show()"/>
+                    <p:commandButton value="Выход" action="#{userSession.logout}" ajax="false"
+                                     styleClass="ui-button-flat"/>
+                    <!-- Таймеры ГБР/МЧС идут, пока открыта любая страница приложения -->
+                    <p:poll interval="5" listener="#{carMonitorBean.catchUp}" process="@this" update="@none"
+                            global="false" rendered="#{carMonitorBean.available}"/>
+                    <p:poll interval="5" listener="#{ndvMonitorBean.catchUp}" process="@this" update="@none"
+                            global="false" rendered="#{ndvMonitorBean.available}"/>
+                </h:form>
+            </header>
+            <nav class="sidebar">
+                <ui:repeat value="#{userSession.sections}" var="s">
+                    <h:link outcome="#{userSession.path(s)}" value="#{s.title()}"
+                            styleClass="#{view.viewId eq userSession.path(s) ? 'selected' : ''}"/>
+                </ui:repeat>
+            </nav>
+            <main class="content">
+                <ui:insert name="content"/>
+            </main>
+        </div>
+
+        <p:growl id="growl" life="6000" showDetail="false">
+            <p:autoUpdate/>
+        </p:growl>
+
+        <p:confirmDialog global="true" header="Охранное агентство" responsive="true">
+            <p:commandButton value="Да" type="button" styleClass="ui-confirmdialog-yes"/>
+            <p:commandButton value="Нет" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"/>
+        </p:confirmDialog>
+
+        <p:dialog widgetVar="aboutDlg" header="О программе" modal="true" resizable="false">
+            <p>Данная программа создана в рамках дипломной работы:<br/>
+                Информационная система охранного агентства</p>
+            <p>Создатель:<br/>Студент группы ПКуспк-320<br/>Морозов Иван Валерьевич</p>
+        </p:dialog>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      lang="ru">
+<f:view locale="ru">
+    <ui:param name="code" value="#{requestScope['jakarta.servlet.error.status_code']}"/>
+    <h:head>
+        <meta charset="UTF-8"/>
+        <title>Охранное агентство — ошибка</title>
+        <h:outputStylesheet name="css/app.css"/>
+    </h:head>
+    <h:body>
+        <div class="login-root">
+            <div class="card">
+                <h2 class="card-title">#{code eq 403 ? 'Доступ запрещён' : code eq 404 ? 'Страница не найдена'
+                        : code eq 503 ? 'Сервис недоступен' : 'Ошибка'}</h2>
+                <div class="error-text">#{code eq 403 or code eq 503
+                        ? requestScope['jakarta.servlet.error.message']
+                        : code eq 404 ? '' : 'Внутренняя ошибка приложения'}</div>
+                <a href="#{request.contextPath}/">На главную</a>
+            </div>
+        </div>
+    </h:body>
+</f:view>
+</html>

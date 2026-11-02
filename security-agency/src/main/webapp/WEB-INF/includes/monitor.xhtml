@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <!-- Мониторинг объекта (панели CarPANEL / NdvPANEL WinForms-версии); m — CarMonitorBean или NdvMonitorBean -->
+    <h:form id="monitorForm">
+        <div class="monitor">
+            <div class="monitor-left">
+                <h2 class="screen-title">#{m.title}</h2>
+
+                <h:panelGroup id="scheme" layout="block" styleClass="scheme"
+                              style="background-image: url('#{resource[m.scheme]}')">
+                    <ui:repeat value="#{m.sensors}" var="p">
+                        <p:commandButton value="#{p.sensor().label()}" styleClass="sensor"
+                                         style="left: #{p.x() - 10}px; top: #{p.y() - 11}px"
+                                         action="#{m.trigger(p.sensor())}" disabled="#{m.sensorsDisabled}"
+                                         process="@this" update=":monitorForm:info :monitorForm:journal"
+                                         oncomplete="if (args &amp;&amp; args.fired) App.flash('#{component.clientId}'); App.scrollJournal()"/>
+                    </ui:repeat>
+                </h:panelGroup>
+
+                <h:panelGroup id="controls" layout="block" styleClass="controls">
+                    <div class="switch-row">
+                        <p:toggleSwitch id="armed" value="#{m.armed}" disabled="#{m.armedDisabled}">
+                            <p:ajax listener="#{m.armedChanged}" update="@form" oncomplete="App.scrollJournal()"/>
+                        </p:toggleSwitch>
+                        <p:outputLabel for="armed" value="Охрана включена"/>
+                    </div>
+                    <h:panelGroup layout="block" styleClass="switch-row" rendered="#{m.car}">
+                        <p:toggleSwitch id="ignition" value="#{m.ignitionBlocked}" disabled="#{m.ignitionDisabled}">
+                            <p:ajax listener="#{m.ignitionChanged}" update="@form" oncomplete="App.scrollJournal()"/>
+                        </p:toggleSwitch>
+                        <p:outputLabel for="ignition" value="Глушение двигателя"/>
+                    </h:panelGroup>
+                    <div class="buttons">
+                        <p:commandButton value="Отправить группу быстрого реагирования" action="#{m.requestGbr}"
+                                         disabled="#{m.actionsDisabled}" process="@this"
+                                         update=":monitorForm:info :monitorForm:journal"
+                                         oncomplete="App.scrollJournal()"/>
+                        <p:commandButton value="Вызвать МЧС" rendered="#{not m.car}" action="#{m.callMchs}"
+                                         disabled="#{m.actionsDisabled}" process="@this"
+                                         update=":monitorForm:info :monitorForm:journal"
+                                         styleClass="ui-button-danger" oncomplete="App.scrollJournal()"/>
+                    </div>
+                </h:panelGroup>
+            </div>
+
+            <div class="monitor-right">
+                <p:outputLabel for="object" value="Объект"/>
+                <p:selectOneMenu id="object" value="#{m.objectId}" filter="true" filterMatchMode="contains"
+                                 style="width: 100%">
+                    <f:selectItem itemLabel="Выберите объект" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{m.objects}" var="o" itemLabel="#{o.label()}" itemValue="#{o.objectId()}"/>
+                    <p:ajax listener="#{m.select}" update="@form" oncomplete="App.scrollJournal()"/>
+                </p:selectOneMenu>
+
+                <h:panelGroup id="info" layout="block">
+                    <div class="info-row"><span>Владелец:</span><span>#{m.ownerName}</span></div>
+                    <div class="info-row"><span>Статус:</span><span class="status-label">#{m.status}</span></div>
+                    <div class="timers">
+                        <span>Время до ГБР: #{m.gbrText}</span>
+                        <ui:fragment rendered="#{not m.car}"><span>Время до МЧС: #{m.mchsText}</span></ui:fragment>
+                    </div>
+                </h:panelGroup>
+
+                <span>Журнал событий</span>
+                <h:panelGroup id="journal" layout="block" styleClass="journal">
+                    <ui:repeat value="#{m.journal}" var="line">
+                        <div class="journal-line">#{line}</div>
+                    </ui:repeat>
+                    <h:outputText styleClass="muted" value="Событий нет" rendered="#{empty m.journal}"/>
+                </h:panelGroup>
+            </div>
+        </div>
+
+        <p:poll interval="1" listener="#{m.poll}" process="@this" update="@none" global="false"
+                oncomplete="App.scrollJournal()"/>
+    </h:form>
+</ui:composition>

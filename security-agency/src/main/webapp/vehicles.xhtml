@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/table.xhtml">
+    <ui:param name="bean" value="#{vehiclesBean}"/>
+    <ui:param name="editable" value="#{true}"/>
+
+    <ui:define name="form">
+        <p:outputLabel for="client" value="Клиент"/>
+        <p:selectOneMenu id="client" value="#{vehiclesBean.form.clientId}" filter="true"
+                         filterMatchMode="contains">
+            <f:selectItem itemLabel="— выберите —" itemValue="#{null}" noSelectionOption="true"/>
+            <f:selectItems value="#{vehiclesBean.clients}" var="c" itemLabel="#{c.name()}" itemValue="#{c.id()}"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="brand" value="Марка"/>
+        <p:inputText id="brand" value="#{vehiclesBean.form.brand}"/>
+        <p:outputLabel for="model" value="Модель"/>
+        <p:inputText id="model" value="#{vehiclesBean.form.model}"/>
+        <p:outputLabel for="reg" value="Гос. номер"/>
+        <p:inputText id="reg" value="#{vehiclesBean.form.regNumber}"/>
+        <p:outputLabel for="vin" value="VIN"/>
+        <p:inputText id="vin" value="#{vehiclesBean.form.vin}"/>
+        <p:outputLabel for="status" value="Статус объекта"/>
+        <p:selectOneMenu id="status" value="#{vehiclesBean.form.status}">
+            <f:selectItems value="#{vehiclesBean.statuses}" var="s" itemLabel="#{s.title()}" itemValue="#{s}"/>
+        </p:selectOneMenu>
+    </ui:define>
+</ui:composition>

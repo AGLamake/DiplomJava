@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/table.xhtml">
+    <ui:param name="bean" value="#{clientsBean}"/>
+    <ui:param name="editable" value="#{true}"/>
+
+    <ui:define name="form">
+        <p:outputLabel for="type" value="Тип"/>
+        <p:selectOneMenu id="type" value="#{clientsBean.form.type}">
+            <f:selectItems value="#{clientsBean.types}" var="t" itemLabel="#{t.title()}" itemValue="#{t}"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="name" value="Наименование / ФИО"/>
+        <p:inputText id="name" value="#{clientsBean.form.name}"/>
+        <p:outputLabel for="contact" value="Контактное лицо"/>
+        <p:inputText id="contact" value="#{clientsBean.form.contactPerson}"/>
+        <p:outputLabel for="phone" value="Телефон"/>
+        <p:inputText id="phone" value="#{clientsBean.form.phone}"/>
+        <p:outputLabel for="email" value="E-mail"/>
+        <p:inputText id="email" value="#{clientsBean.form.email}"/>
+    </ui:define>
+</ui:composition>

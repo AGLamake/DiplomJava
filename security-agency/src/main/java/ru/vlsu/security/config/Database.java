@@ -52,6 +52,8 @@ public final class Database {
 
     public static HikariDataSource create(Properties p) {
         HikariConfig config = new HikariConfig();
+        // Явно: в Tomcat драйвер из WEB-INF/lib не регистрируется в DriverManager автоматически.
+        config.setDriverClassName("org.postgresql.Driver");
         config.setJdbcUrl(p.getProperty("db.url"));
         config.setUsername(p.getProperty("db.user"));
         config.setPassword(p.getProperty("db.password"));

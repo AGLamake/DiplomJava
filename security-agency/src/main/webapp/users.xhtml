@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/table.xhtml">
+    <ui:param name="bean" value="#{usersBean}"/>
+    <ui:param name="editable" value="#{true}"/>
+
+    <ui:define name="form">
+        <h:outputText value="Логин"/>
+        <h:outputText value="#{usersBean.form.login}"/>
+        <p:outputLabel for="fullName" value="ФИО"/>
+        <p:inputText id="fullName" value="#{usersBean.form.fullName}"/>
+        <p:outputLabel for="phone" value="Телефон"/>
+        <p:inputText id="phone" value="#{usersBean.form.phone}"/>
+        <p:outputLabel for="email" value="E-mail"/>
+        <p:inputText id="email" value="#{usersBean.form.email}"/>
+        <p:outputLabel for="role" value="Роль"/>
+        <p:selectOneMenu id="role" value="#{usersBean.form.role}">
+            <f:selectItems value="#{usersBean.roles}" var="r" itemLabel="#{r.title()}" itemValue="#{r}"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="active" value="Активен"/>
+        <p:selectBooleanCheckbox id="active" value="#{usersBean.form.active}"/>
+    </ui:define>
+
+    <ui:define name="actions">
+        <p:commandButton value="Сбросить пароль" rendered="#{usersBean.canWrite}"
+                         disabled="#{usersBean.selected eq null}" action="#{usersBean.startResetPassword}"
+                         process="@this" update=":passwordForm"
+                         oncomplete="if (args &amp;&amp; args.open) PF('passwordDlg').show()"/>
+    </ui:define>
+
+    <ui:define name="dialogs">
+        <p:dialog widgetVar="passwordDlg" header="Сброс пароля" modal="true" resizable="false" appendTo="@(body)">
+            <h:form id="passwordForm">
+                <div class="form-grid">
+                    <h:outputText value="Пользователь"/>
+                    <h:outputText value="#{usersBean.selected.login()}"/>
+                    <p:outputLabel for="p1" value="Новый пароль"/>
+                    <p:password id="p1" value="#{usersBean.newPassword}"/>
+                    <p:outputLabel for="p2" value="Повторите пароль"/>
+                    <p:password id="p2" value="#{usersBean.newPasswordRepeat}"/>
+                </div>
+                <div class="dialog-buttons">
+                    <p:commandButton value="Сохранить" action="#{usersBean.resetPassword}" update="@form"
+                                     oncomplete="if (args &amp;&amp; args.saved) PF('passwordDlg').hide()"/>
+                    <p:commandButton value="Отмена" type="button" styleClass="ui-button-secondary"
+                                     onclick="PF('passwordDlg').hide()"/>
+                </div>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

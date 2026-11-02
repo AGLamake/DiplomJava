@@ -13,6 +13,6 @@ class SmokeTest {
 
     @Test
     void appClassExists() throws ClassNotFoundException {
-        Class.forName("ru.vlsu.security.Launcher");
+        Class.forName("ru.vlsu.security.web.AppResources");
     }
 }

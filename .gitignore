@@ -2,5 +2,6 @@ target/
 *.iml
 .idea/
 security-agency/src/main/resources/db.properties
+security-agency/db.properties
 ~$*.docx
 .superpowers/

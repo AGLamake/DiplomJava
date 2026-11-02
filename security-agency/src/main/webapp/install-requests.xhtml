@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/table.xhtml">
+    <ui:param name="bean" value="#{installRequestsBean}"/>
+    <ui:param name="editable" value="#{true}"/>
+
+    <ui:define name="form">
+        <p:outputLabel for="object" value="Объект"/>
+        <p:selectOneMenu id="object" value="#{installRequestsBean.form.objectId}" filter="true"
+                         filterMatchMode="contains">
+            <f:selectItem itemLabel="— выберите —" itemValue="#{null}" noSelectionOption="true"/>
+            <f:selectItems value="#{installRequestsBean.objects}" var="o" itemLabel="#{o.label()}"
+                           itemValue="#{o.id()}"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="engineer" value="Исполнитель"/>
+        <p:selectOneMenu id="engineer" value="#{installRequestsBean.form.engineerId}">
+            <f:selectItem itemLabel="Не назначен" itemValue="#{null}" noSelectionOption="true"/>
+            <f:selectItems value="#{installRequestsBean.engineers}" var="e" itemLabel="#{e.fullName()}"
+                           itemValue="#{e.id()}"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="scheduled" value="Дата выезда"/>
+        <p:datePicker id="scheduled" value="#{installRequestsBean.form.scheduled}" pattern="dd.MM.yyyy"
+                      showIcon="true"/>
+        <p:outputLabel for="status" value="Статус"/>
+        <p:selectOneMenu id="status" value="#{installRequestsBean.form.status}">
+            <f:selectItems value="#{installRequestsBean.statuses}" var="s" itemLabel="#{s.title()}"
+                           itemValue="#{s}"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="description" value="Описание"/>
+        <p:inputTextarea id="description" value="#{installRequestsBean.form.description}" rows="3"
+                         autoResize="false"/>
+    </ui:define>
+</ui:composition>

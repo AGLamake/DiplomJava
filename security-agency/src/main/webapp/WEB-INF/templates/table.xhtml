@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/layout.xhtml">
+    <!--
+        Экран-таблица (вместо TableViewController). Параметры:
+          bean     — TableBean или CrudBean страницы;
+          editable — #{true}, если bean является CrudBean: кнопки «Добавить / Изменить / Удалить» и диалог формы.
+        Вставки: form (поля диалога), actions (доп. кнопки), dialogs (доп. диалоги), poll (автообновление).
+    -->
+    <ui:define name="content">
+        <h:form id="tableForm" styleClass="table-screen">
+            <div class="table-header">
+                <h2 class="screen-title">#{bean.title}</h2>
+                <p:inputText id="search" value="#{bean.query}" placeholder="Поиск…" styleClass="search">
+                    <p:ajax event="keyup" delay="300" listener="#{bean.applyFilter}" update="table"/>
+                </p:inputText>
+            </div>
+
+            <p:dataTable id="table" value="#{bean.rows}" var="row" rowKey="#{bean.keyOf(row)}"
+                         selectionMode="single" selection="#{bean.selected}" emptyMessage="Нет записей"
+                         scrollable="true" scrollHeight="flex" stripedRows="true" size="small"
+                         tableStyle="table-layout: auto">
+                <p:ajax event="rowSelect" update=":tableForm:buttons"/>
+                <p:ajax event="rowUnselect" update=":tableForm:buttons"/>
+                <p:ajax event="rowDblselect" listener="#{bean.startEdit}" disabled="#{not editable}"
+                        update=":tableForm:buttons :editForm :editTitle"
+                        oncomplete="if (args &amp;&amp; args.open) PF('editDlg').show()"/>
+                <p:columns value="#{bean.columns}" var="col" headerText="#{col.title()}"
+                           style="min-width: #{col.width()}px">
+                    <h:outputText value="#{col.text(row)}"/>
+                </p:columns>
+            </p:dataTable>
+
+            <h:panelGroup id="buttons" layout="block" styleClass="buttons">
+                <ui:fragment rendered="#{editable and bean.canWrite}">
+                    <p:commandButton value="Добавить" rendered="#{bean.canAdd}" action="#{bean.startAdd}"
+                                     process="@this" update=":editForm :editTitle"
+                                     oncomplete="if (args &amp;&amp; args.open) PF('editDlg').show()"/>
+                    <p:commandButton value="Изменить" disabled="#{bean.selected eq null}" action="#{bean.startEdit}"
+                                     process="@this" update=":editForm :editTitle"
+                                     oncomplete="if (args &amp;&amp; args.open) PF('editDlg').show()"/>
+                    <p:commandButton value="Удалить" rendered="#{bean.canDelete}" disabled="#{bean.selected eq null}"
+                                     action="#{bean.delete}" process="@this" update="@form"
+                                     styleClass="ui-button-danger">
+                        <p:confirm message="Удалить выбранную запись?" icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
+                </ui:fragment>
+                <ui:insert name="actions"/>
+                <p:commandButton value="Обновить" action="#{bean.refresh}" process="@this" update="@form"
+                                 styleClass="ui-button-secondary"/>
+            </h:panelGroup>
+
+            <ui:insert name="poll"/>
+        </h:form>
+
+        <ui:fragment rendered="#{editable}">
+            <p:dialog widgetVar="editDlg" modal="true" resizable="false" appendTo="@(body)" responsive="true">
+                <f:facet name="header">
+                    <h:outputText id="editTitle" value="#{bean.formTitle}"/>
+                </f:facet>
+                <h:form id="editForm">
+                    <h:panelGroup layout="block" styleClass="form-grid" rendered="#{bean.form ne null}">
+                        <ui:insert name="form"/>
+                    </h:panelGroup>
+                    <div class="dialog-buttons">
+                        <p:commandButton value="Сохранить" action="#{bean.save}" update="@form :tableForm"
+                                         oncomplete="if (args &amp;&amp; args.saved) PF('editDlg').hide()"/>
+                        <p:commandButton value="Отмена" type="button" styleClass="ui-button-secondary"
+                                         onclick="PF('editDlg').hide()"/>
+                    </div>
+                </h:form>
+            </p:dialog>
+        </ui:fragment>
+
+        <ui:insert name="dialogs"/>
+    </ui:define>
+</ui:composition>

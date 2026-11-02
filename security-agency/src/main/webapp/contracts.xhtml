@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/table.xhtml">
+    <ui:param name="bean" value="#{contractsBean}"/>
+    <ui:param name="editable" value="#{true}"/>
+
+    <ui:define name="form">
+        <p:outputLabel for="client" value="Клиент"/>
+        <p:selectOneMenu id="client" value="#{contractsBean.form.clientId}" filter="true"
+                         filterMatchMode="contains">
+            <f:selectItem itemLabel="— выберите —" itemValue="#{null}" noSelectionOption="true"/>
+            <f:selectItems value="#{contractsBean.clients}" var="c" itemLabel="#{c.name()}" itemValue="#{c.id()}"/>
+            <p:ajax listener="#{contractsBean.clientChanged}" process="@this objects" update="objects"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="number" value="Номер договора"/>
+        <p:inputText id="number" value="#{contractsBean.form.number}"/>
+        <p:outputLabel for="signed" value="Дата подписания"/>
+        <p:datePicker id="signed" value="#{contractsBean.form.signedOn}" pattern="dd.MM.yyyy" showIcon="true"/>
+        <p:outputLabel for="from" value="Действует с"/>
+        <p:datePicker id="from" value="#{contractsBean.form.validFrom}" pattern="dd.MM.yyyy" showIcon="true"/>
+        <p:outputLabel for="to" value="Действует по"/>
+        <p:datePicker id="to" value="#{contractsBean.form.validTo}" pattern="dd.MM.yyyy" showIcon="true"/>
+        <p:outputLabel for="status" value="Статус"/>
+        <p:selectOneMenu id="status" value="#{contractsBean.form.status}">
+            <f:selectItems value="#{contractsBean.statuses}" var="s" itemLabel="#{s.title()}" itemValue="#{s}"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="price" value="Цена, руб./мес."/>
+        <p:inputText id="price" value="#{contractsBean.form.price}"/>
+        <h:outputText value="Объекты"/>
+        <h:panelGroup id="objects" layout="block" styleClass="checks">
+            <p:selectManyCheckbox id="objectIds" value="#{contractsBean.form.objectIds}" layout="pageDirection"
+                                  converter="jakarta.faces.Long" rendered="#{not empty contractsBean.clientObjects}">
+                <f:selectItems value="#{contractsBean.clientObjects}" var="o" itemLabel="#{o.label()}"
+                               itemValue="#{o.id()}"/>
+            </p:selectManyCheckbox>
+            <h:outputText styleClass="muted" value="Нет объектов" rendered="#{empty contractsBean.clientObjects}"/>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

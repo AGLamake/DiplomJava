@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/table.xhtml">
+    <ui:param name="bean" value="#{teamsBean}"/>
+    <ui:param name="editable" value="#{true}"/>
+
+    <ui:define name="form">
+        <p:outputLabel for="name" value="Название"/>
+        <p:inputText id="name" value="#{teamsBean.form.name}"/>
+        <p:outputLabel for="phone" value="Телефон"/>
+        <p:inputText id="phone" value="#{teamsBean.form.phone}"/>
+        <p:outputLabel for="status" value="Статус"/>
+        <p:selectOneMenu id="status" value="#{teamsBean.form.status}">
+            <f:selectItems value="#{teamsBean.statuses}" var="s" itemLabel="#{s.title()}" itemValue="#{s}"/>
+        </p:selectOneMenu>
+        <h:outputText value="Состав"/>
+        <h:panelGroup layout="block" styleClass="checks">
+            <p:selectManyCheckbox id="members" value="#{teamsBean.form.memberIds}" layout="pageDirection"
+                                  converter="jakarta.faces.Long" rendered="#{not empty teamsBean.members}">
+                <f:selectItems value="#{teamsBean.members}" var="u" itemLabel="#{u.fullName()}" itemValue="#{u.id()}"/>
+            </p:selectManyCheckbox>
+            <h:outputText styleClass="muted" rendered="#{empty teamsBean.members}"
+                          value="Нет активных пользователей с ролью «Сотрудник ГБР»"/>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

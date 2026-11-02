@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/table.xhtml">
+    <ui:param name="bean" value="#{myDispatchesBean}"/>
+    <ui:param name="editable" value="#{false}"/>
+
+    <ui:define name="actions">
+        <ui:fragment rendered="#{myDispatchesBean.canWrite}">
+            <p:commandButton value="Прибыли на место" disabled="#{not myDispatchesBean.canMarkArrived}"
+                             action="#{myDispatchesBean.markArrived}" process="@this" update="@form"/>
+            <p:commandButton value="Завершить выезд" disabled="#{myDispatchesBean.selected eq null}"
+                             action="#{myDispatchesBean.startComplete}" process="@this" update=":completeForm"
+                             oncomplete="if (args &amp;&amp; args.open) PF('completeDlg').show()"/>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="poll">
+        <p:poll interval="5" listener="#{myDispatchesBean.refresh}" process="@this" update="table buttons"
+                global="false"/>
+    </ui:define>
+
+    <ui:define name="dialogs">
+        <ui:include src="/WEB-INF/includes/complete-dialog.xhtml">
+            <ui:param name="owner" value="#{myDispatchesBean}"/>
+        </ui:include>
+    </ui:define>
+</ui:composition>

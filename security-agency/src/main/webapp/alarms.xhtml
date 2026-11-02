@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/table.xhtml">
+    <ui:param name="bean" value="#{alarmsBean}"/>
+    <ui:param name="editable" value="#{false}"/>
+
+    <ui:define name="actions">
+        <ui:fragment rendered="#{alarmsBean.canWrite}">
+            <p:commandButton value="Завершить выезд" disabled="#{not alarmsBean.canComplete}"
+                             action="#{alarmsBean.startComplete}" process="@this" update=":completeForm"
+                             oncomplete="if (args &amp;&amp; args.open) PF('completeDlg').show()"/>
+            <p:commandButton value="Ложная тревога" disabled="#{not alarmsBean.canMarkFalseAlarm}"
+                             action="#{alarmsBean.markFalseAlarm}" process="@this" update="@form">
+                <p:confirm message="Отметить событие как ложную тревогу?" icon="pi pi-question-circle"/>
+            </p:commandButton>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="poll">
+        <p:poll interval="5" listener="#{alarmsBean.refresh}" process="@this" update="table buttons"
+                global="false"/>
+    </ui:define>
+
+    <ui:define name="dialogs">
+        <ui:include src="/WEB-INF/includes/complete-dialog.xhtml">
+            <ui:param name="owner" value="#{alarmsBean}"/>
+        </ui:include>
+    </ui:define>
+</ui:composition>

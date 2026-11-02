@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/table.xhtml">
+    <ui:param name="bean" value="#{equipmentBean}"/>
+    <ui:param name="editable" value="#{true}"/>
+
+    <ui:define name="form">
+        <p:outputLabel for="object" value="Объект"/>
+        <p:selectOneMenu id="object" value="#{equipmentBean.form.objectId}" filter="true"
+                         filterMatchMode="contains">
+            <f:selectItem itemLabel="— выберите —" itemValue="#{null}" noSelectionOption="true"/>
+            <f:selectItems value="#{equipmentBean.objects}" var="o" itemLabel="#{o.label()}" itemValue="#{o.id()}"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="type" value="Тип"/>
+        <p:selectOneMenu id="type" value="#{equipmentBean.form.typeId}">
+            <f:selectItem itemLabel="— выберите —" itemValue="#{null}" noSelectionOption="true"/>
+            <f:selectItems value="#{equipmentBean.types}" var="t" itemLabel="#{t.name()}" itemValue="#{t.id()}"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="serial" value="Серийный номер"/>
+        <p:inputText id="serial" value="#{equipmentBean.form.serialNumber}"/>
+        <p:outputLabel for="installed" value="Дата установки"/>
+        <p:datePicker id="installed" value="#{equipmentBean.form.installationDate}" pattern="dd.MM.yyyy"
+                      showIcon="true"/>
+        <p:outputLabel for="status" value="Статус"/>
+        <p:selectOneMenu id="status" value="#{equipmentBean.form.status}">
+            <f:selectItems value="#{equipmentBean.statuses}" var="s" itemLabel="#{s.title()}" itemValue="#{s}"/>
+        </p:selectOneMenu>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/table.xhtml">
+    <ui:param name="bean" value="#{realEstateBean}"/>
+    <ui:param name="editable" value="#{true}"/>
+
+    <ui:define name="form">
+        <p:outputLabel for="client" value="Клиент"/>
+        <p:selectOneMenu id="client" value="#{realEstateBean.form.clientId}" filter="true"
+                         filterMatchMode="contains">
+            <f:selectItem itemLabel="— выберите —" itemValue="#{null}" noSelectionOption="true"/>
+            <f:selectItems value="#{realEstateBean.clients}" var="c" itemLabel="#{c.name()}" itemValue="#{c.id()}"/>
+        </p:selectOneMenu>
+        <p:outputLabel for="name" value="Название"/>
+        <p:inputText id="name" value="#{realEstateBean.form.name}"/>
+        <p:outputLabel for="address" value="Адрес"/>
+        <p:inputText id="address" value="#{realEstateBean.form.address}"/>
+        <p:outputLabel for="status" value="Статус объекта"/>
+        <p:selectOneMenu id="status" value="#{realEstateBean.form.status}">
+            <f:selectItems value="#{realEstateBean.statuses}" var="s" itemLabel="#{s.title()}" itemValue="#{s}"/>
+        </p:selectOneMenu>
+    </ui:define>
+</ui:composition>

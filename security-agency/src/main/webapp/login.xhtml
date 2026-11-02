@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      lang="ru">
+<f:view locale="ru">
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Охранное агентство — вход</title>
+        <h:outputStylesheet name="css/app.css"/>
+    </h:head>
+    <h:body>
+        <div class="login-root">
+            <h:form id="loginForm">
+                <h:panelGroup layout="block" styleClass="card" rendered="#{not loginBean.registration}">
+                    <h2 class="card-title">Авторизация</h2>
+                    <p:inputText id="login" value="#{loginBean.login}" placeholder="Логин"/>
+                    <p:password id="password" value="#{loginBean.password}" placeholder="Пароль"/>
+                    <div class="buttons">
+                        <p:commandButton id="enter" value="Войти" action="#{loginBean.login}" update="@form"/>
+                        <p:commandButton value="Регистрация" action="#{loginBean.showRegistration}"
+                                         process="@this" update="@form" styleClass="ui-button-secondary"/>
+                    </div>
+                    <p:defaultCommand target="enter"/>
+                </h:panelGroup>
+
+                <h:panelGroup layout="block" styleClass="card" rendered="#{loginBean.registration}">
+                    <h2 class="card-title">Регистрация</h2>
+                    <p:inputText id="regLogin" value="#{loginBean.regLogin}" placeholder="Логин"/>
+                    <p:inputText id="regFullName" value="#{loginBean.regFullName}" placeholder="ФИО"/>
+                    <p:password id="regPassword" value="#{loginBean.regPassword}" placeholder="Пароль"/>
+                    <p:password id="regRepeat" value="#{loginBean.regRepeat}" placeholder="Повторите пароль"/>
+                    <div class="buttons">
+                        <p:commandButton id="create" value="Создать аккаунт" action="#{loginBean.register}"
+                                         update="@form"/>
+                        <p:commandButton value="Назад" action="#{loginBean.showLogin}" process="@this"
+                                         update="@form" styleClass="ui-button-secondary"/>
+                    </div>
+                    <p:defaultCommand target="create"/>
+                </h:panelGroup>
+            </h:form>
+        </div>
+        <p:growl id="growl" life="6000" showDetail="false">
+            <p:autoUpdate/>
+        </p:growl>
+    </h:body>
+</f:view>
+</html>
