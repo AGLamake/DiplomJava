@@ -5,3 +5,8 @@ security-agency/src/main/resources/db.properties
 security-agency/db.properties
 ~$*.docx
 .superpowers/
+# Материалы курсовой и диплома — только локально
+/*.docx
+/*этап*.sql
+/template.md
+/Диаграмма_классов*.png
