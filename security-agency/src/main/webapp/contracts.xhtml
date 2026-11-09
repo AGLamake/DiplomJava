@@ -29,7 +29,7 @@
         </p:selectOneMenu>
         <p:outputLabel for="price" value="Цена, руб./мес."/>
         <p:inputText id="price" value="#{contractsBean.form.price}"/>
-        <h:outputText value="Объекты"/>
+        <h:outputText styleClass="form-label" value="Объекты"/>
         <h:panelGroup id="objects" layout="block" styleClass="checks">
             <p:selectManyCheckbox id="objectIds" value="#{contractsBean.form.objectIds}" layout="pageDirection"
                                   converter="jakarta.faces.Long" rendered="#{not empty contractsBean.clientObjects}">

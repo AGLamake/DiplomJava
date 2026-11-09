@@ -8,8 +8,8 @@
     <ui:param name="editable" value="#{true}"/>
 
     <ui:define name="form">
-        <h:outputText value="Логин"/>
-        <h:outputText value="#{usersBean.form.login}"/>
+        <h:outputText styleClass="form-label" value="Логин"/>
+        <h:outputText styleClass="form-value" value="#{usersBean.form.login}"/>
         <p:outputLabel for="fullName" value="ФИО"/>
         <p:inputText id="fullName" value="#{usersBean.form.fullName}"/>
         <p:outputLabel for="phone" value="Телефон"/>
@@ -35,8 +35,8 @@
         <p:dialog widgetVar="passwordDlg" header="Сброс пароля" modal="true" resizable="false" appendTo="@(body)">
             <h:form id="passwordForm">
                 <div class="form-grid">
-                    <h:outputText value="Пользователь"/>
-                    <h:outputText value="#{usersBean.selected.login()}"/>
+                    <h:outputText styleClass="form-label" value="Пользователь"/>
+                    <h:outputText styleClass="form-value" value="#{usersBean.selected.login()}"/>
                     <p:outputLabel for="p1" value="Новый пароль"/>
                     <p:password id="p1" value="#{usersBean.newPassword}"/>
                     <p:outputLabel for="p2" value="Повторите пароль"/>

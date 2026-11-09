@@ -136,6 +136,21 @@ html, body {
     box-sizing: border-box;
 }
 
+/*
+ * Каждая ячейка .form-grid должна быть отдельным элементом. h:outputText без id/style/styleClass
+ * выводит голый текст: соседние такие тексты сливаются в одну ячейку сетки, а пустое значение
+ * не даёт ячейки вовсе — и все следующие поля формы съезжают. Поэтому у текстовых подписей
+ * и значений в форме всегда задан styleClass (form-label / form-value), чтобы JSF выводил <span>.
+ */
+.form-grid .form-label {
+    align-self: start;
+}
+
+.form-grid .form-value {
+    font-weight: bold;
+    min-height: 1em;
+}
+
 .form-grid .checks {
     max-height: 200px;
     overflow-y: auto;

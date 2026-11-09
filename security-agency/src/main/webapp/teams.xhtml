@@ -16,7 +16,7 @@
         <p:selectOneMenu id="status" value="#{teamsBean.form.status}">
             <f:selectItems value="#{teamsBean.statuses}" var="s" itemLabel="#{s.title()}" itemValue="#{s}"/>
         </p:selectOneMenu>
-        <h:outputText value="Состав"/>
+        <h:outputText styleClass="form-label" value="Состав"/>
         <h:panelGroup layout="block" styleClass="checks">
             <p:selectManyCheckbox id="members" value="#{teamsBean.form.memberIds}" layout="pageDirection"
                                   converter="jakarta.faces.Long" rendered="#{not empty teamsBean.members}">
